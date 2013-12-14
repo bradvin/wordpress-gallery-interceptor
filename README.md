@@ -3,6 +3,9 @@ wordpress-gallery-interceptor
 
 A simple plugin utilizing the new filters I propose to be added to the gallery_shortcode function in core
 
+## Trac Ticket
+Follow the [trac ticket](http://core.trac.wordpress.org/ticket/26623) I submitted to core!
+
 ## Proposed Patch
 My proposed changes (included in [media.php.patch](https://github.com/bradvin/wordpress-gallery-interceptor/blob/master/media.php.patch)) to the gallery_shortcode function include the following:
 

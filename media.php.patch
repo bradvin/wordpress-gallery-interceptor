@@ -1,0 +1,58 @@
+Index: media.php
+===================================================================
+--- media.php	(revision 26748)
++++ media.php	(working copy)
+@@ -735,7 +735,8 @@
+ 		'size'       => 'thumbnail',
+ 		'include'    => '',
+ 		'exclude'    => '',
+-		'link'       => ''
++		'link'       => '',
++		'class'		 => ''
+ 	), $attr, 'gallery'));
+ 
+ 	$id = intval($id);
+@@ -804,9 +805,26 @@
+ 			/* see gallery_shortcode() in wp-includes/media.php */
+ 		</style>";
+ 	$size_class = sanitize_html_class( $size );
+-	$gallery_div = "<div id='$selector' class='gallery galleryid-{$id} gallery-columns-{$columns} gallery-size-{$size_class}'>";
+-	$output = apply_filters( 'gallery_style', $gallery_style . "\n\t\t" . $gallery_div );
+ 
++	//allow plugins or themes to alter the gallery class
++	$gallery_class = apply_filters( 'gallery_class', "gallery galleryid-{$id} gallery-columns-{$columns} gallery-size-{$size_class} {$class}", $selector, $attr );
++
++	//allow plugins or themes to alter the gallery container's opening markup. E.g. include extra attributes or even use a different tag
++	$gallery_start = apply_filters( 'gallery_container_start', "<div id='$selector' class='$gallery_class'>", $selector, $gallery_class, $attr );
++
++	//allow plugins or themes to alter the default gallery inline styles
++	$gallery_style = apply_filters( 'gallery_style', $gallery_style, $selector, $attr );
++
++	//allow plugins or themes to alter the gallery column separator markup
++	$gallery_separator = apply_filters( 'gallery_column_separator', '<br style="clear: both" />', $selector, $attr );
++
++	//allow plugins or themes to alter the gallery container's closing markup
++	$gallery_end = apply_filters( 'gallery_container_end', "
++			<br style='clear: both;' />
++		</div>\n", $selector, $attr );
++
++	$output =  $gallery_style . "\n\t\t" . $gallery_start;
++
+ 	$i = 0;
+ 	foreach ( $attachments as $id => $attachment ) {
+ 		if ( ! empty( $link ) && 'file' === $link )
+@@ -835,12 +853,10 @@
+ 		}
+ 		$output .= "</{$itemtag}>";
+ 		if ( $columns > 0 && ++$i % $columns == 0 )
+-			$output .= '<br style="clear: both" />';
++			$output .= $gallery_separator;
+ 	}
+ 
+-	$output .= "
+-			<br style='clear: both;' />
+-		</div>\n";
++	$output .= $gallery_end;
+ 
+ 	return $output;
+ }

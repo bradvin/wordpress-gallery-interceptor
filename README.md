@@ -92,9 +92,9 @@ function gallery_intercept_container_end($html, $selector, $attr) {
 add_filter('gallery_container_end', 'gallery_intercept_container_end', 10, 3);
 ```
 
-### gallery_intercept_separator Filter
+### gallery_column_separator Filter
 
-Introduce a new filter `gallery_intercept_separator` which can be used to alter the separator markup of the gallery. This filter can be used to override the <br /> tag that is inserted when the column count is met.
+Introduce a new filter `gallery_column_separator` which can be used to alter the separator markup of the gallery. This filter can be used to override the <br /> tag that is inserted when the column count is met.
 
 Paramters:
 
